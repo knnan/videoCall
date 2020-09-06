@@ -193,7 +193,7 @@ socketAuth( io, {
 				}
 			}
 
-		} );
+		} ); ``;
 
 
 
@@ -214,8 +214,17 @@ socketAuth( io, {
 	 */},
 } );
 
-function sendLocalCandidates ()
+function sendLocalCandidates ( event, socket, type )
 {
+
+	let candidate = kurento.register.complexTypes.IceCandidate( event.candidate );
+	socket.emit( 'message', {
+		event: 'candidate',
+		userInfo: socket.user,
+		candidate: candidate,
+		type: type
+	} );
+
 
 }
 
@@ -223,9 +232,10 @@ function addIceCandidateFromPeers ( socket, senderId, iceCandidate, type )
 {
 	try
 	{
-		if ( getRoomObject( socket.user.roomName ).participants[ socket.user.userId ] != null )
+		if ( getRoomObject( socket.user.roomName ).participants[ socket.user.userId ] != undefined )
 		{
 			let LocalUser = getRoomObject( socket.user.roomName ).participants[ socket.user.userId ];
+			let kurento = getRoomObject( socket.user.roomName ).kclient;
 			let candidate = kurento.register.complexTypes.IceCandidate( iceCandidate );
 			if ( senderId == socket.user.userId )
 			{
@@ -306,6 +316,7 @@ async function joinRoom ( socket )
 	{
 
 		let myRoom = await getRoom( socket );
+		let kurento = myRoom.kclient;
 		let roomUser = {
 			id: socket.user.userId,
 			socketId: socket.id,
@@ -412,6 +423,7 @@ async function getEndpoingForUser ( socket, askerId, type )
 	{
 
 		let myRoom = getRoomObject( socket.user.roomName );
+		let kurento = myRoom.kclient;
 		let sender = myRoom.participants[ socket.user.userId ];
 		let asker = myRoom.participants[ askerId ];
 		if ( sender == null )
@@ -510,7 +522,8 @@ async function getRoom ( socket ) // TODO send url parameter for kurento url
 			{
 				const kclient = await KurentoClientWrapper.createClient( ws_uri );
 				const pipeline = await KurentoClientWrapper.createPipeline( kclient );
-				socket.user.kclient = kclient;
+				myRoom.kclient = kclient;
+				myRoom.presenter = socket.user.isPresenter ? socket.user.userId : null;
 				myRoom.pipeline = pipeline;
 				myRoom.participants = {};
 			} );

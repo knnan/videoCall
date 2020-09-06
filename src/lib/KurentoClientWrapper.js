@@ -1,12 +1,12 @@
 //@ts-check
 const kurentoClient = require( 'kurento-client' );
 
-/**
+/*
  * Collection of Kurento operations. Promise wrappers around kurento-client
  */
 class KurentoClientWrapper
 {
-	/**
+	/*
 	* @param {string} wsUri
 	* @return {Promise<import('kurento-client')>};
 	*/
@@ -63,9 +63,10 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
-	 * @param {import('kurento-client-core').MediaPipeline} pipeline
-	 * @return {Promise<import('kurento-client-elements').WebRtcEndpoint>}
+	/* 	
+		 * @param {import('kurento-client-core').MediaPipeline} pipeline
+		 * @return {Promise<import('kurento-client-elements').WebRtcEndpoint>}
+		
 	 */
 	static createWebRtcEndpoint ( pipeline )
 	{
@@ -89,7 +90,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * @param {import('kurento-client-core').MediaPipeline} pipeline
 	 * @param {string} uri
 	 * @return {Promise<import('kurento-client-elements').RecorderEndpoint>}
@@ -117,7 +118,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * @param {import('kurento-client-elements').RecorderEndpoint} recorderEndpoint
 	 * @returns {Promise<void>}
 	 */
@@ -137,7 +138,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * @return {string}
 	 */
 	static generateBaseRecordName ()
@@ -145,7 +146,7 @@ class KurentoClientWrapper
 		return `${ Date.now() }`;
 	}
 
-	/**
+	/*
 	 *
 	 * @param {import('kurento-client-elements').WebRtcEndpoint} webRtcEndpoint
 	 * @param {import('kurento-client-elements').WebRtcEndpoint|import('kurento-client-elements').RecorderEndpoint} someEndpoint
@@ -167,7 +168,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 *
 	 * @param {import('kurento-client-elements').WebRtcEndpoint} webRtcEndpoint
 	 * @param {import('kurento-client-elements').WebRtcEndpoint|import('kurento-client-elements').RecorderEndpoint} someEndpoint
@@ -189,7 +190,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 *
 	 * @param {import('kurento-client-elements').WebRtcEndpoint} webRtcEndpoint
 	 * @return {Promise<void>}
@@ -210,7 +211,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * @param {import('kurento-client-elements').WebRtcEndpoint|import('kurento-client-elements').RecorderEndpoint} endpoint
 	 * @param {string} eventName
 	 * @param {(evt: any) => void} callback
@@ -222,7 +223,7 @@ class KurentoClientWrapper
 		endpoint.on( eventName, callback );
 	}
 
-	/**
+	/*
 	 *
 	 * @param {import('kurento-client-elements').RecorderEndpoint} recorderEndpoint
 	 * @return {Promise<void>}
@@ -239,7 +240,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * @param {import('kurento-client-elements').WebRtcEndpoint|import('kurento-client-elements').RecorderEndpoint} someEndpoint
 	 * @return {Promise<void>}
 	 */
@@ -264,7 +265,7 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * processAnswer and gatherCandidates
 	 * @param {import('kurento-client-elements').WebRtcEndpoint} webRtcEndpoint
 	 * @param {string} offer
@@ -293,13 +294,13 @@ class KurentoClientWrapper
 		} );
 	}
 
-	/**
+	/*
 	 * @param {import('kurento-client-elements').WebRtcEndpoint} webRtcEndpoint
 	 * @param {string} [prefix]
 	 */
 	static setDebugListeners ( webRtcEndpoint, prefix = '' )
 	{
-		/** taken from source kurento-client */
+		/* taken from source kurento-client */
 		const eventsArray = [
 			// webRtcEndpoint events
 			'DataChannelClose',
@@ -330,7 +331,7 @@ class KurentoClientWrapper
 		} );
 	}
 }
-/** @type {import('kurento-client')} */
+/* @type {import('kurento-client')} */
 KurentoClientWrapper.client = null;
 
 module.exports.KurentoClientWrapper = KurentoClientWrapper;
