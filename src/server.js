@@ -161,15 +161,19 @@ socketAuth( io, {
 					joinRoom();
 					break;
 				case 'RECIEVE_MEDIA_FROM':
-					recieveMediaFrom( socket, message.askerId, message.sdpOffer, message.type );
+					recieveMediaFrom( socket, message.from, message.sdpOffer, message.type );
 					break;
 				case 'ICECANDIDATE':
-					addIceCandidateFromPeers( socket, message.senderId, message.type );
+					addIceCandidateFromPeers( socket, socket.user.userId, message.candidate, message.type );
 					break;
 				default:
 					break;
 			}
 		} );
+
+
+		// send authenicated message to client
+		socket.emit( 'user-authenticated', socket.user );
 
 
 		socket.on( 'disconnect', async () =>
@@ -193,7 +197,7 @@ socketAuth( io, {
 				}
 			}
 
-		} ); ``;
+		} );
 
 
 
@@ -398,17 +402,18 @@ async function joinRoom ( socket )
 }
 
 
-async function recieveMediaFrom ( socket, askerId, offer, type )
+async function recieveMediaFrom ( socket, from, offer, type )
 {
 	try
 	{
 
-		let endpoint = await getEndpoingForUser( socket, askerId, type );
+		let endpoint = await getEndpoingForUser( socket, from, type );
 		let answer = await KurentoClientWrapper.getAnswer( endpoint, offer );
 		socket.emit( 'message', {
 			event: 'receiveMediaAnswer',
-			userInfo: socket.user,
-			answer: answer
+			senderId: from,
+			sdpAnswer: answer,
+			type: type
 		} );
 	} catch ( err )
 	{
@@ -417,15 +422,15 @@ async function recieveMediaFrom ( socket, askerId, offer, type )
 
 }
 
-async function getEndpoingForUser ( socket, askerId, type )
+async function getEndpoingForUser ( socket, from, type )
 {
 	try
 	{
 
 		let myRoom = getRoomObject( socket.user.roomName );
 		let kurento = myRoom.kclient;
-		let sender = myRoom.participants[ socket.user.userId ];
-		let asker = myRoom.participants[ askerId ];
+		let asker = myRoom.participants[ socket.user.userId ];
+		let sender = myRoom.participants[ from ];
 		if ( sender == null )
 		{
 
@@ -520,7 +525,7 @@ async function getRoom ( socket ) // TODO send url parameter for kurento url
 		{
 			socket.join( roomname, () =>
 			{
-				const kclient = await KurentoClientWrapper.createClient( ws_uri );
+				const kclient = await KurentoClientWrapper.createClient( process.env.ws_uri );
 				const pipeline = await KurentoClientWrapper.createPipeline( kclient );
 				myRoom.kclient = kclient;
 				myRoom.presenter = socket.user.isPresenter ? socket.user.userId : null;

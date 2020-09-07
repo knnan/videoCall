@@ -11,6 +11,7 @@ class KurentoClientWrapper
 	* @return {Promise<import('kurento-client')>};
 	*/
 
+
 	static createClient ( wsUri )
 	{
 		return new Promise( ( resolve, reject ) =>
@@ -40,6 +41,11 @@ class KurentoClientWrapper
 		} );
 	}
 
+	// static registerComplexTypes ( candidate )
+	// {
+	// 	console.log( 'kurentggggg' );
+	// 	console.log( kurentoClient.register.complexTypes( candidate ) );
+	// }
 	static createPipeline ( kClient )
 	{
 		return new Promise( ( resolve, reject ) =>

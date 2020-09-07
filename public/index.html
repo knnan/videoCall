@@ -1,13 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	<h1>Hello world</h1>
 
-	<script src="js/client.js"></script>
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="./js/kurento-utils.min.js"></script>
+
+		<script src="/socket.io/socket.io.js"></script>
+
+	</head>
+
+	<body>
+		<h1>Hello world</h1>
+		<div id="maincont" class="container">
+			<div>
+				<video class="video-bg" controls autoplay muted id="localvideo">
+					<source src="" type="video/mp4">
+				</video>
+
+			</div>
+			<!-- <div>
+				<video class="video-bg" controls autoplay muted id="remotevideo">
+					<source src="" type="video/mp4">
+				</video>
+
+			</div> -->
+
+		</div>
+
+
+		<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+		<script type='module' src="js/client.js"></script>
+	</body>
+
 </html>
